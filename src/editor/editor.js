@@ -5,7 +5,7 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 
-const EditorComponent = (props) => {
+const EditorComponent = props => {
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -17,21 +17,11 @@ const EditorComponent = (props) => {
     setTitle(selectedNote.title);
     setText(selectedNote.body);
     setId(selectedNote.id);
-  }, [])
+  }, [selectedNote]);
 
   useEffect(() => {
     update();
-  }, [title, text])
-
-  // componentDidUpdate = () => {
-  //   if(this.props.selectedNote.id !== this.state.id) {
-  //     this.setState({
-  //       text: this.props.selectedNote.body,
-  //       title: this.props.selectedNote.title,
-  //       id: this.props.selectedNote.id
-  //     });
-  //   }
-  // }
+  }, [title, text]);
 
   const updateTitle = e => {
     const updatedTitle = e.target.value;

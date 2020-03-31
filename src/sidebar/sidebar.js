@@ -1,80 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 import List from '@material-ui/core/List';
 import { Divider, Button } from '@material-ui/core';
 import SidebarItemComponent from '../sidebaritem/sidebarItem';
 
-class SidebarComponent extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      addingNote: false,
-      title: null
-    };
+const SidebarComponent = props => {
+
+  const [addingNote, setAddingNote] = useState(false);
+  const [title, setTitle] = useState(null);
+
+  const { notes, classes, selectedNoteIndex } = props;
+
+  const newNoteBtnClick = () => {
+    setTitle(null);
+    setAddingNote(!addingNote);
   }
-  render() {
+  
+  const updateTitle = (txt) => {
+    setTitle(txt);
+  }
+  
+  const newNote = () => {
+    props.newNote(title);
+    setTitle(null);
+    setAddingNote(false);
+  }
+  
+  const selectNote = (n, i) => props.selectNote(n, i);
+  
+  const deleteNote = (note) => props.deleteNote(note);
 
-    const { notes, classes, selectedNoteIndex } = this.props;
 
-    if(notes) {
-      return(
-        <div className={classes.sidebarContainer}>
-          <Button
-            onClick={this.newNoteBtnClick}
-            className={classes.newNoteBtn}>{this.state.addingNote ? 'Cancel' : 'New Note'}</Button>
+  if(notes) {
+    return(
+      <div className={classes.sidebarContainer}>
+        <Button
+          onClick={newNoteBtnClick}
+          className={classes.newNoteBtn}>{addingNote ? 'Cancel' : 'New Note'}</Button>
+          {
+            addingNote ? 
+            <div>
+              <input type='text'
+                className={classes.newNoteInput}
+                placeholder='Enter note title'
+                onKeyUp={(e) => updateTitle(e.target.value)}>
+              </input>
+              <Button 
+                className={classes.newNoteSubmitBtn}
+                onClick={newNote}>Submit Note</Button>
+            </div> :
+            null
+          }
+          <List>
             {
-              this.state.addingNote ? 
-              <div>
-                <input type='text'
-                  className={classes.newNoteInput}
-                  placeholder='Enter note title'
-                  onKeyUp={(e) => this.updateTitle(e.target.value)}>
-                </input>
-                <Button 
-                  className={classes.newNoteSubmitBtn}
-                  onClick={this.newNote}>Submit Note</Button>
-              </div> :
-              null
+              notes.map((_note, _index) => {
+                return(
+                  <div key={_index}>
+                    <SidebarItemComponent
+                      _note={_note}
+                      _index={_index}
+                      selectedNoteIndex={selectedNoteIndex}
+                      selectNote={selectNote}
+                      deleteNote={deleteNote}>
+                    </SidebarItemComponent>
+                    <Divider></Divider>
+                  </div>
+                )
+              })
             }
-            <List>
-              {
-                notes.map((_note, _index) => {
-                  return(
-                    <div key={_index}>
-                      <SidebarItemComponent
-                        _note={_note}
-                        _index={_index}
-                        selectedNoteIndex={selectedNoteIndex}
-                        selectNote={this.selectNote}
-                        deleteNote={this.deleteNote}>
-                      </SidebarItemComponent>
-                      <Divider></Divider>
-                    </div>
-                  )
-                })
-              }
-            </List>
-        </div>
-      );
-    } else {
-      return(<div></div>);
-    }
+          </List>
+      </div>
+    );
+  } else {
+    return(<div></div>);
   }
-
-  newNoteBtnClick = () => {
-    this.setState({ title: null, addingNote: !this.state.addingNote });
-  }
-  updateTitle = (txt) => {
-    this.setState({ title: txt });
-  }
-  newNote = () => {
-    this.props.newNote(this.state.title);
-    this.setState({ title: null, addingNote: false });
-  }
-  selectNote = (n, i) => this.props.selectNote(n, i);
-  deleteNote = (note) => this.props.deleteNote(note);
-
 }
 
 export default withStyles(styles)(SidebarComponent);
