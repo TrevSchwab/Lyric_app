@@ -6,39 +6,22 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 
 const EditorComponent = (props) => {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     text: '',
-  //     title: '',
-  //     id: ''
-  //   };
-  // }
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [id, setId] = useState('');
 
-  const { classes } = props;
+  const { classes, noteUpdate, selectedNote } = props;
 
   useEffect(() => {
-    setTitle(props.selectedNote.title);
-    setText(props.selectedNote.body);
-    setId(props.selectedNote.id);
+    setTitle(selectedNote.title);
+    setText(selectedNote.body);
+    setId(selectedNote.id);
   }, [])
 
   useEffect(() => {
-    console.log('update title effect')
     update();
   }, [title, text])
-
-  // componentDidMount = () => {
-  //   this.setState({
-  //     text: this.props.selectedNote.body,
-  //     title: this.props.selectedNote.title,
-  //     id: this.props.selectedNote.id
-  //   });
-  // }
 
   // componentDidUpdate = () => {
   //   if(this.props.selectedNote.id !== this.state.id) {
@@ -50,46 +33,37 @@ const EditorComponent = (props) => {
   //   }
   // }
 
-
   const updateTitle = e => {
     const updatedTitle = e.target.value;
     setTitle(updatedTitle);
-    // update(updatedTitle);
   }
 
   const updateBody = updatedBody => {
-    console.log('updatedBody ', updatedBody);
     setText(updatedBody)
-    // update(updatedBody);
   };
 
   const update = debounce(() => {
-    console.log('updatedTitle ', title);
-    console.log('updatedBody ', text);
-    props.noteUpdate(id, {
+    noteUpdate(id, {
       title: title,
       body: text,
     })
   }, 1500);
 
-  // render() {
-
-    return(
-      <div className={classes.editorContainer}>
-        <BorderColorIcon className={classes.editIcon}></BorderColorIcon>
-        <input
-          className={classes.titleInput}
-          placeholder='Note title...'
-          value={title ? title : ''}
-          onChange={updateTitle}>
-        </input>
-        <ReactQuill 
-          value={text} 
-          onChange={updateBody}>
-        </ReactQuill>
-      </div>
-    );
-  // }
+  return(
+    <div className={classes.editorContainer}>
+      <BorderColorIcon className={classes.editIcon}></BorderColorIcon>
+      <input
+        className={classes.titleInput}
+        placeholder='Note title...'
+        value={title ? title : ''}
+        onChange={updateTitle}>
+      </input>
+      <ReactQuill 
+        value={text} 
+        onChange={updateBody}>
+      </ReactQuill>
+    </div>
+  );
 }
 
 export default withStyles(styles)(EditorComponent);
