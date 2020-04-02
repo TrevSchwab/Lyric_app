@@ -39,6 +39,47 @@ const EditorComponent = props => {
     })
   }, 1500);
 
+
+  const firstPerson = () => {
+    console.log('firstPerson');
+    const findFirstTense = text.toLowerCase().split(' ').map(letter => {
+      return letter.split('');
+      // if (letter === 'i') {
+      //   return letter;
+      // }
+    });
+
+    console.log('findFirstTense ', findFirstTense);
+  };
+
+  const CustomToolbar = () => (
+    <div>
+      <div>
+        <button>
+          Past
+        </button>
+        <button>
+          Present
+        </button>
+        <button>
+          Future
+        </button>
+      </div>
+      <div>
+        <button onClick={firstPerson}>
+          First Person
+        </button>
+        <button>
+          Second Person
+        </button>
+        <button>
+          Third Person
+        </button>
+      </div>
+    </div>
+  )
+  
+
   return(
     <div className={classes.editorContainer}>
       <BorderColorIcon className={classes.editIcon}></BorderColorIcon>
@@ -48,7 +89,9 @@ const EditorComponent = props => {
         value={title ? title : ''}
         onChange={updateTitle}>
       </input>
+      <CustomToolbar />
       <ReactQuill 
+        theme="snow"
         value={text} 
         onChange={updateBody}>
       </ReactQuill>
