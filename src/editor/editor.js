@@ -11,6 +11,8 @@ const EditorComponent = props => {
   const [text, setText] = useState('');
   const [id, setId] = useState('');
 
+  // console.log('text ', text);
+
   const { classes, noteUpdate, selectedNote } = props;
 
   useEffect(() => {
@@ -41,16 +43,22 @@ const EditorComponent = props => {
 
 
   const firstPerson = () => {
-    console.log('firstPerson');
-    const findFirstTense = text.toLowerCase().split(' ').map(letter => {
-      return letter.split('');
-      // if (letter === 'i') {
-      //   return letter;
-      // }
-    });
+    const i = 'i';
+    const replaceBrackets = text.replace(/[\<\>\/]+/g,' ')
+      .toLowerCase().split(' ')
 
-    console.log('findFirstTense ', findFirstTense);
+      console.log('replaceBrackets ', replaceBrackets.replace(i, `<span class="some">`+i+`</span>`));
+    return replaceBrackets;
+    
+
+    // console.log('firstPerson');
+    // const findFirstTense = text.toLowerCase().split('').map(letter => {
+    //   return letter.split('');
+
+    // });
   };
+
+  console.log('firstPerson ', firstPerson);
 
   const CustomToolbar = () => (
     <div>
